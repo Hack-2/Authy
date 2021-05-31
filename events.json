@@ -1,0 +1,14 @@
+[
+  {
+    "workshop_name" : "Boston Dynamics",
+    "code" : "#BOSTON"
+  },
+  {
+    "workshop_name" : "Google Cloud",
+    "code" : "#GOOGLE"
+  },
+  {
+    "workshop_name" : "Arduino",
+    "code" : "#ARDUINO"
+  }
+]
