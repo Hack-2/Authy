@@ -1,11 +1,11 @@
 import discord
 import json
 
-from models import verifyCode
+from lib.models import verifyCode
 
 client = discord.Client()
 
-with open('.env', 'r') as file:  
+with open('.env', 'r') as file:
     TOKEN = json.load(file)
     TOKEN = TOKEN['token']
 
