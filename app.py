@@ -9,22 +9,22 @@ with open('.env', 'r') as file:
     TOKEN = json.load(file)
     TOKEN = TOKEN['token']
 
-commands = []  # Initialize commands
+commands = []  
 
-channel = 'testing'
+channel = 'verification'
 
 class Command:
     def __init__(self, command, channel, output):
         self.command = command
         self.channel = channel
         self.output = output
-        commands.append(self)  # Add command to commands list
+        commands.append(self)
 
-    def run(self):
-        if self.command == '.verify':
-            pong()
-
-        return self.output
+    # def run(self):
+    #     if self.command == '.verify':
+    #         pong()
+    #
+    #     return self.output
 
 
 
@@ -37,10 +37,8 @@ async def on_message(message):
     message_ = message.content.split()
     for command in commands:
         if len(message_) > 1 and message_[0] == command.command and str(message.channel) == command.channel and message_[1][0] == '#' and len(message_) == 2:
-            # msg = command.run()
-            # msg = msg.format(message)
             author = str(message.author).split('#')
-            response = verifyCode(author[0], author[1], message_[1])
+            response = verifyCode(author[0], author[1], message_[1]) + f' {message.author.mention}'
             await message.channel.send(response)
         else:
             pass
