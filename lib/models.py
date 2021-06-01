@@ -1,8 +1,7 @@
 import ssl
 import json
 import pymongo
-import pandas as pd
-from pandas import ExcelWriter, ExcelFile
+
 
 with open('.env', 'r') as f:
     env = json.load(f)
