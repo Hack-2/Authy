@@ -17,7 +17,7 @@ when mongo detects the request, it triggers another js script that saves the dat
       "mongodb_user" : "MONGODB_USERNAME",
       "mongodb_pass" : "MONGODB_PASSWORD"
     }
-    
+  ```
 
 # Commands Available
 
