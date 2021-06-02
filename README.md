@@ -9,7 +9,7 @@ when mongo detects the request, it triggers another js script that saves the dat
 # Installation and setup:
 * ```git clone https://github.com/Hack-2/Hacky-Auth```
 * ```python3 -m pip install -r requirements.txt```
-* ```python3 app.py```
+* ```python3 bot.py```
 * .env file format:
     ```
     {
