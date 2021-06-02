@@ -22,7 +22,7 @@ Authentication bot for hack^2.
     +===============+=======================================================================================+
     | !help         | Lists all available commands.                                                         |
     +---------------+---------------------------------------------------------------------------------------+
-    | !info         | Lists user's info such as (registration data and workshops attended).                 |
+    | !info         | Lists user's info such as (registration date and workshops attended).                 |
     +---------------+---------------------------------------------------------------------------------------+
     | !verify #CODE | Verifies codes given at workshops to prove attendance and saves them in the database. |
     +---------------+---------------------------------------------------------------------------------------+
