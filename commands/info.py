@@ -35,22 +35,29 @@ class Info(BaseCommand):
         author_tag = str(message.author).split('#')[1]
         query = db_col.find({'discord_name' : f'{author_name}', 'discord_tag' : f'{author_tag}'})
         info = [x for x in query]
+        if not info:
+            await message.channel.send("You need to register first.")
+        else:
 
-        workshops_attended = ''
-        roles = ''
+            roles = ''
 
-        for code in info[0]['codes_used']:
-            query = db_col_events.find({'code' : code})
-            workshop_info = [x for x in query]
-            workshops_attended += '\n      ' + workshop_info[0]['workshop_name']
+            if not info[0]['codes_used']:
+                workshops_attended = 'No workshops attended'
+            else:
+                workshops_attended = ''
+                for code in info[0]['codes_used']:
+                    query = db_col_events.find({'code' : code})
+                    workshop_info = [x for x in query]
+                    workshops_attended += '\n      ' + workshop_info[0]['workshop_name']
 
-        for role in message.author.roles:
-            roles += f', @{role}'
+
+            for role in message.author.roles:
+                roles += f', @{role}'
 
 
 
-        embed = discord.Embed(title=f"{str(message.author)} Info:", color=0x32a89e)
-        embed.add_field(name="Registration Date:", value=info[0]['registration_datetime'],  inline=False)
-        embed.add_field(name="Roles:", value=roles.replace('@everyone', '')[5:],  inline=False)
-        embed.add_field(name="Workshops Attended:", value=workshops_attended)
-        await message.channel.send(embed=embed)
+            embed = discord.Embed(title=f"{str(message.author)} Info:", color=0x69E4BE)
+            embed.add_field(name="Registration Date:", value=info[0]['timestamp'],  inline=False)
+            embed.add_field(name="Roles:", value=roles[3:],  inline=False)
+            embed.add_field(name="Workshops Attended:", value=workshops_attended)
+            await message.channel.send(embed=embed)
