@@ -29,6 +29,8 @@ when mongo detects the request, it triggers another js script that saves the dat
     +---------------+---------------------------------------------------------------------------------------+
     | !info         | Lists user's info such as (registration date and workshops attended).                 |
     +---------------+---------------------------------------------------------------------------------------+
+    | !plot         | Plots the increase of registered users daily.                                         |
+    +---------------+---------------------------------------------------------------------------------------+
     | !verify #CODE | Verifies codes given at workshops to prove attendance and saves them in the database. |
     +---------------+---------------------------------------------------------------------------------------+
 
