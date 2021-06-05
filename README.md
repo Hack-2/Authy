@@ -36,6 +36,6 @@ when mongo detects the request, it triggers another js script that saves the dat
 
 
 # To do
-* Send matplotlib graphs about users registrations and attendances. ✅ 
+* Send matplotlib graphs about users registrations. ✅ 
 * Add exceptions to pass any possible errors.
 
