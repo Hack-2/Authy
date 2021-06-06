@@ -1,7 +1,8 @@
 import json
 import settings
 
-from utils                      import get_channel
+
+from utils                      import get_channel, get_emoji
 from commands.base_command      import BaseCommand
 from commands.mongo_connection import connect
 
@@ -9,6 +10,7 @@ from commands.mongo_connection import connect
 db = connect()
 db_col = db['users']
 db_col_events = db['events']
+
 
 
 class Verify(BaseCommand):
@@ -31,7 +33,7 @@ class Verify(BaseCommand):
         # parameters as specified in __init__
         # 'message' is the discord.py Message object for the command to handle
         # 'client' is the bot Client object
-        log = ""
+        checkmark_emoji = get_emoji('white_check_mark')
         code = params[0]
         author_name = str(message.author).split('#')[0]
         author_tag = str(message.author).split('#')[1]
@@ -48,24 +50,16 @@ class Verify(BaseCommand):
                 if not codes_used:
                     _codes_used.append(code)
                     db_col.update({"discord_name" : f"{author_name}", "discord_tag" : f"{author_tag}"}, {"$set" : {"codes_used" : _codes_used, "workshops_attended" : len(_codes_used)}})
-                    msg = 'Verified code.'
-                    log = f'{str(message.author)} verified code: {code}.'
+                    msg = f'Verified code {checkmark_emoji}.'
                 else:
                     if code not in unique[0]['codes_used']:
                         _codes_used = unique[0]['codes_used']
                         _codes_used.append(code)
                         db_col.update({"discord_name" : f"{author_name}", "discord_tag" : f"{author_tag}"}, {"$set" : {"codes_used" :_codes_used, "workshops_attended" : len(_codes_used)}})
-                        msg = 'Verified code.'
-                        log = f'{str(message.author)} verified code: {code}.'
+                        msg = f'Verified code {checkmark_emoji}.'
                     else:
                         msg = 'Code already redeemed.'
             else:
                 msg = 'Invalid code.'
 
-        if log:
-            channel = get_channel(client, "logs")
-            await channel.send(log)
-            await message.channel.send(f'{message.author.mention} {msg}')
-
-        else:
-            await message.channel.send(f'{message.author.mention} {msg}')
+        await message.channel.send(f'{message.author.mention} {msg}')

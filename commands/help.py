@@ -1,6 +1,8 @@
 import discord
 from commands.base_command import BaseCommand
 
+from utils import get_emoji
+
 
 # This is a convenient command that automatically generates a helpful
 # message showing all available commands
@@ -13,8 +15,8 @@ class Help(BaseCommand):
 
     async def handle(self, params, message, client):
         from message_handler import COMMAND_HANDLERS
-
-        embed = discord.Embed(title="Hacky-Auth Commands:", color=0x32a89e)
+        books_emoji = get_emoji('books')
+        embed = discord.Embed(title=f"{books_emoji} Hacky-Auth Commands:\n\u200B", color=0x32a89e)
 
         # Displays all descriptions, sorted alphabetically by command name
         for cmd in sorted(COMMAND_HANDLERS.items()):
