@@ -52,7 +52,7 @@ class Info(BaseCommand):
         query = db_col.find({'discord_name' : f'{author_name}', 'discord_tag' : f'{author_tag}'})
         info = [x for x in query]
         if not info:
-            await message.channel.send("You need to register first.")
+            await message.channel.send(f'{message.author.mention} User not found, Please register first here: https://vtvktlsmrhk.typeform.com/to/H9gU9j6L.')
         else:
 
             roles = ''

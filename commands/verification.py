@@ -38,11 +38,10 @@ class Verify(BaseCommand):
         author_name = str(message.author).split('#')[0]
         author_tag = str(message.author).split('#')[1]
         event_codes = [x['code'] for x in db_col_events.find()]
-
         query = db_col.find({'discord_name' : f'{author_name}', 'discord_tag' : f'{author_tag}'})
         unique = [x for x in query]
         if not unique:
-            msg = 'User not found, Please register first.'
+            msg = 'User not found, Please register first here: https://vtvktlsmrhk.typeform.com/to/H9gU9j6L.'
         else:
             if code in event_codes:
                 _codes_used = []
