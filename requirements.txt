@@ -11,3 +11,5 @@ tzlocal
 websockets
 pymongo
 dnspython
+python-dateutil
+matplotlib
