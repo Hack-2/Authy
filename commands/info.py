@@ -75,4 +75,4 @@ class Info(BaseCommand):
             embed.add_field(name=f"{calender_emoji} Registration Date:", value=f'{toDateTimeObj(toTimestamp(info[0]["timestamp"]))}\n\u200B',  inline=False)
             embed.add_field(name=f"{briefcase_emoji} Roles:", value=roles[3:] + f"\n\u200B",  inline=False)
             embed.add_field(name=f"{scroll_emoji} Workshops Attended :", value=workshops_attended)
-            await message.channel.send(embed=embed)
+            await message.channel.send(embed=embed, delete_after=60*60)

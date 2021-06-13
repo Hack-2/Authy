@@ -33,32 +33,39 @@ class Verify(BaseCommand):
         # parameters as specified in __init__
         # 'message' is the discord.py Message object for the command to handle
         # 'client' is the bot Client object
+        await message.delete()
+        
         checkmark_emoji = get_emoji('white_check_mark')
+        redcircle_emoji = get_emoji('red_circle')
         code = params[0]
         author_name = str(message.author).split('#')[0]
         author_tag = str(message.author).split('#')[1]
         event_codes = [x['code'] for x in db_col_events.find()]
         query = db_col.find({'discord_name' : f'{author_name}', 'discord_tag' : f'{author_tag}'})
         unique = [x for x in query]
-        if not unique:
-            msg = 'User not found, Please register first here: https://vtvktlsmrhk.typeform.com/to/H9gU9j6L.'
+        if len(unique) > 1:
+            msg = 'There was an error please contact the tech team.'
         else:
-            if code in event_codes:
-                _codes_used = []
-                codes_used = unique[0]['codes_used']
-                if not codes_used:
-                    _codes_used.append(code)
-                    db_col.update({"discord_name" : f"{author_name}", "discord_tag" : f"{author_tag}"}, {"$set" : {"codes_used" : _codes_used, "workshops_attended" : len(_codes_used)}})
-                    msg = f'Verified code {checkmark_emoji}.'
-                else:
-                    if code not in unique[0]['codes_used']:
-                        _codes_used = unique[0]['codes_used']
+            if not unique:
+                msg = f'User not found, Please register first here: https://vtvktlsmrhk.typeform.com/to/H9gU9j6L.\n{redcircle_emoji}**If you think this is a mistake please contact the tech team.**'
+            else:
+                if code in event_codes:
+                    _codes_used = []
+                    codes_used = unique[0]['codes_used']
+                    if not codes_used:
                         _codes_used.append(code)
-                        db_col.update({"discord_name" : f"{author_name}", "discord_tag" : f"{author_tag}"}, {"$set" : {"codes_used" :_codes_used, "workshops_attended" : len(_codes_used)}})
+                        db_col.update({"discord_name" : f"{author_name}", "discord_tag" : f"{author_tag}"}, {"$set" : {"codes_used" : _codes_used, "workshops_attended" : len(_codes_used)}})
                         msg = f'Verified code {checkmark_emoji}.'
                     else:
-                        msg = 'Code already redeemed.'
-            else:
-                msg = 'Invalid code.'
+                        if code not in unique[0]['codes_used']:
+                            _codes_used = unique[0]['codes_used']
+                            _codes_used.append(code)
+                            db_col.update({"discord_name" : f"{author_name}", "discord_tag" : f"{author_tag}"}, {"$set" : {"codes_used" :_codes_used, "workshops_attended" : len(_codes_used)}})
+                            msg = f'Verified code {checkmark_emoji}.'
+                        else:
+                            msg = 'Code already redeemed.'
+                else:
+                    msg = 'Invalid code.'
 
-        await message.channel.send(f'{message.author.mention} {msg}')
+
+        await message.channel.send(f'{message.author.mention} {msg}', delete_after=6*60*60)

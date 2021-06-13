@@ -19,10 +19,9 @@ class Help(BaseCommand):
         embed = discord.Embed(title=f"{books_emoji} Hacky-Auth Commands:\n\u200B", color=0x32a89e)
 
         # Displays all descriptions, sorted alphabetically by command name
-        roles = [(x.name).lower() for x in message.author.roles]
         for cmd in sorted(COMMAND_HANDLERS.items()):
             name  = cmd[1].description.split(':')[0]
             value = cmd[1].description.split(':')[1]
             embed.add_field(name=name, value=value,  inline=False)
 
-        await message.channel.send(embed=embed)
+        await message.channel.send(embed=embed, delete_after=60*60)

@@ -19,5 +19,10 @@ NOW_PLAYING = COMMAND_PREFIX + "commands"
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 #Mongo db credentials
-mongodb_user = env['mongodb_user']
-mongodb_pass = env['mongodb_pass']
+mongodb_user = env['mongo_user']
+mongodb_pass = env['mongo_pass']
+
+
+#Log channel ids
+test_server_logs_id = 849556415056183296
+main_server_logs_id = 850787339596464198

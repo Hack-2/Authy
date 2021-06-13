@@ -41,40 +41,43 @@ class Plot(BaseCommand):
         # parameters as specified in __init__
         # 'message' is the discord.py Message object for the command to handle
         # 'client' is the bot Client object
-        dates = []
-        for user in db_col.find():
-            timestamp = toDateTimeObj(toTimestamp(user['timestamp']))
-            dates.append(timestamp)
+        roles = [(x.name).lower() for x in message.author.roles]
+        if 'organizer' in roles:
+            dates = []
+            for user in db_col.find():
+                timestamp = toDateTimeObj(toTimestamp(user['timestamp']))
+                dates.append(timestamp)
 
-        occ = [0 for x in range(len(dates))]
+            occ = [0 for x in range(len(dates))]
 
-        startDate = datetime.datetime.strptime( dates[0], "%Y-%m-%d")
-        endDate   = datetime.datetime.strptime( dates[-1],"%Y-%m-%d")
-        days = (endDate - startDate).days
+            startDate = datetime.datetime.strptime( dates[0], "%Y-%m-%d")
+            endDate   = datetime.datetime.strptime( dates[-1],"%Y-%m-%d")
+            days = (endDate - startDate).days
 
-        allDates = {datetime.datetime.strftime(startDate+datetime.timedelta(days=k),
-                                           "%Y-%m-%d"):0 for k in range(days+1)}
+            allDates = {datetime.datetime.strftime(startDate+datetime.timedelta(days=k),
+                                               "%Y-%m-%d"):0 for k in range(days+1)}
 
-        allDates.update(zip(dates,occ))
-        datesAfter,occAfter = map(list,zip(*sorted(allDates.items())))
-        dates_to_delete = datesAfter[0:-5]
-        for x in dates_to_delete:
-            allDates.pop(x)
+            allDates.update(zip(dates,occ))
+            datesAfter,occAfter = map(list,zip(*sorted(allDates.items())))
+            dates_to_delete = datesAfter[0:-5]
+            for x in dates_to_delete:
+                allDates.pop(x)
 
-        for date in dates:
-            if date in allDates:
-                allDates[date] = allDates[date] + 1
+            for date in dates:
+                if date in allDates:
+                    allDates[date] = allDates[date] + 1
 
-        plt.xticks(rotation=22)
-        plt.plot(*zip(*sorted(allDates.items())), color='#388CF7')
-        plt.xlabel("Time")
-        plt.ylabel("Users")
-        plt.savefig('tmp.png', bbox_inches='tight')
-        plt.close()
+            plt.plot(*zip(*sorted(allDates.items())), color='#388CF7')
+            plt.xlabel("Time")
+            plt.ylabel("Users")
+            plt.savefig('tmp.png', bbox_inches='tight')
+            plt.close()
 
 
-        file = discord.File('tmp.png')
-        embed = discord.Embed(title='Users Plot', color=0x69E4BE)
-        embed.set_image(url="attachment://tmp.png")
-        channel = get_channel(client, "logs")
-        await channel.send(embed=embed, file=file)
+            file = discord.File('tmp.png')
+            embed = discord.Embed(title='Users Plot', color=0x69E4BE)
+            embed.set_image(url="attachment://tmp.png")
+            channel = client.get_channel(settings.test_server_logs_id)
+            await channel.send(embed=embed, file=file)
+        else:
+            await message.channel.send(f'{message.author.mention} You don\'t have access to use this command.', delete_after=5*60)
